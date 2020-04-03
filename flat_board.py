@@ -34,11 +34,17 @@ class FlatBoard:
     def __len__(self):
         return len(self._board)
 
-    def create_copy(self) -> List[List[Cell]]:
+    def create_copy(self) -> 'FlatBoard':
         """Create a copy of the board, so when checking if neighbours are
          alive/dead, can make valid comparisons, meanwhile changing status of
          Cell in the original board"""
-        return self._board[:]
+        board_copy = FlatBoard(len(self))
+        board_copy.set_cell_neighbours()
+        for column in self._board:
+            for cell in column:
+                board_copy._board[cell.x // spacing][
+                    cell.y // spacing].set_state(cell.get_state())
+        return board_copy
 
     def get_cell(self) -> Cell:
         """Return a cell found at coordinates, x, y"""
@@ -124,7 +130,7 @@ class FlatBoard:
     def update_board(self) -> None:
         """Update <self> to be the next generation of the board."""
         board_copy = self.create_copy()
-        for column in board_copy:
+        for column in board_copy._board:
             for cell in column:
                 active = cell.get_active_neighbours()
                 if (cell.get_state() == 0) and (len(active) == 3):
