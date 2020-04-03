@@ -99,7 +99,7 @@ class FlatBoard:
                                                    [pos[1] // spacing])
                 cell.set_neighbours(neighbour_cells)
 
-    def draw_board(self) -> pygame.Surface:
+    def draw_board(self, active: bool) -> pygame.Surface:
         """Draw a rectangle for each cell on the board."""
         for column in self._board:
             for cell in column:
@@ -121,10 +121,11 @@ class FlatBoard:
                                       size[0] // length), 1)
 
         # draw a black box over the current highlighted cell
-        curr_cell = self.get_cell()
-        pygame.draw.rect(surface, BLACK, (curr_cell.x, curr_cell.y,
-                                          size[0]//length,
-                                          size[0]//length), 1)
+        if active:
+            curr_cell = self.get_cell()
+            pygame.draw.rect(surface, BLACK, (curr_cell.x, curr_cell.y,
+                                              size[0]//length,
+                                              size[0]//length), 1)
         return surface
 
     def update_board(self) -> None:
@@ -147,3 +148,7 @@ class FlatBoard:
                     # all other cells die
                     self._board[cell.x//spacing][cell.y//spacing].set_state(0)
 
+    def reset_board(self) -> None:
+        for column in self._board:
+            for cell in column:
+                cell.set_state(0)

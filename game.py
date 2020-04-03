@@ -33,7 +33,7 @@ class Game:
 
         running = True
         while running:
-            frame = mode.draw_board()
+            frame = mode.draw_board(True)
             self.screen.blit(frame, (0, 0))
             pygame.display.flip()
 
@@ -45,7 +45,21 @@ class Game:
                     mode.update_cell_status(cell,
                                             (cell.get_state() + 1) % 2)
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-                    mode.update_board()
+                    game_mode = 0
+                    while game_mode == 0:
+                        frame = mode.draw_board(False)
+                        self.screen.blit(frame, (0, 0))
+                        pygame.time.wait(game_speed)
+                        pygame.display.flip()
+                        mode.update_board()
+                        frame.fill(WHITE)
+                        for e in pygame.event.get():
+                            if e.type == \
+                              pygame.MOUSEBUTTONDOWN and event.button == 3:
+                                game_mode = 1
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        mode.reset_board()
             frame.fill(WHITE)
 
 
