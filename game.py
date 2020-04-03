@@ -40,10 +40,12 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     cell = mode.get_cell()
                     mode.update_cell_status(cell,
                                             (cell.get_state() + 1) % 2)
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                    mode.update_board()
             frame.fill(WHITE)
 
 

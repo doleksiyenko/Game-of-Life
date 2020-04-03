@@ -17,9 +17,9 @@ class Cell:
     _state: int
     _coordinates = Tuple[int, int]
 
-    def __init__(self, pos_x, pos_y):
+    def __init__(self, pos_x: int, pos_y: int, state: int):
         self._neighbours = []
-        self._state = 0
+        self._state = state
         self.x = pos_x
         self.y = pos_y
 

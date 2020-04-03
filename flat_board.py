@@ -28,7 +28,7 @@ class FlatBoard:
             x = i * (size[0] // length)
             for j in range(length):
                 y = j * (size[1] // length)
-                column.append(Cell(x, y))
+                column.append(Cell(x, y, 0))
             self._board.append(column)
 
     def __len__(self):
@@ -121,4 +121,23 @@ class FlatBoard:
                                           size[0]//length), 1)
         return surface
 
+    def update_board(self) -> None:
+        """Update <self> to be the next generation of the board."""
+        board_copy = self.create_copy()
+        for column in board_copy:
+            for cell in column:
+                active = cell.get_active_neighbours()
+                if (cell.get_state() == 0) and (len(active) == 3):
+                    # if the cell is dead, but has 3 active neighbours,
+                    # it becomes alive in the next generation, as by
+                    # reproduction
+                    self._board[cell.x//spacing][cell.y//spacing].set_state(1)
+                elif (cell.get_state() == 1) and \
+                        ((len(active) == 2) or (len(active) == 3)):
+                    # if the cell is alive, and has 2 or 3 live neighbours,
+                    # survives to the next generation
+                    self._board[cell.x//spacing][cell.y//spacing].set_state(1)
+                else:
+                    # all other cells die
+                    self._board[cell.x//spacing][cell.y//spacing].set_state(0)
 
